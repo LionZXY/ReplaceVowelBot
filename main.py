@@ -1,4 +1,5 @@
 import re
+import secret
 from uuid import uuid4
 
 from telegram import InlineQueryResultArticle, InputTextMessageContent
@@ -42,7 +43,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("925384798:AAHq5HdBhTuIYKZq-qtvQVA1wrSVMyJbv3E", use_context=True)
+    updater = Updater(secret.token, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
