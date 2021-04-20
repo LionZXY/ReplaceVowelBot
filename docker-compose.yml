@@ -3,3 +3,5 @@ services:
     image: lionzxy/replace_vowel_bot
     container_name: replace_vowel_bot
     restart: unless-stopped
+    volumes:
+    - ./secret.py:/app/secret.py
