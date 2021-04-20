@@ -5,6 +5,6 @@ WORKDIR /app/
 ADD requirments.txt requirments.txt
 RUN pip install -r requirments.txt
 
-ADD . .
+ADD . /app/
 
-CMD python main.py
+CMD python /app/main.py
