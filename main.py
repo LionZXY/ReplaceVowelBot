@@ -1,9 +1,9 @@
 import re
-import secret
-from uuid import uuid4
-
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, CommandHandler, InlineQueryHandler
+from uuid import uuid4
+
+import secret
 
 
 def replace_to_e(text):
@@ -12,6 +12,11 @@ def replace_to_e(text):
 
 def replace_to_bi(text):
     return re.sub("[АУОЫИЭЯЮЕЁ]", "Ы", re.sub("[ауоыиэяюеё]", "ы", text))
+
+
+def replace_to_custom(text):
+    to, source_text = text.split(' ', 1)
+    return re.sub("[АУОЫИЭЯЮЕЁауоыиэяюеё]", to, source_text)
 
 
 def without_glass(text):
@@ -24,17 +29,26 @@ def inlinequery(update, context):
     results = [
         InlineQueryResultArticle(
             id=uuid4(),
-            title="На Ё",
+            title=replace_to_e(query),
             input_message_content=InputTextMessageContent(replace_to_e(query))),
         InlineQueryResultArticle(
             id=uuid4(),
-            title="На Ы",
+            title=replace_to_bi(query),
             input_message_content=InputTextMessageContent(replace_to_bi(query))),
         InlineQueryResultArticle(
             id=uuid4(),
-            title="Без гласных",
+            title=without_glass(query),
             input_message_content=InputTextMessageContent(without_glass(query)))
     ]
+
+    try:
+        replace_text = replace_to_custom(query)
+        results.append(InlineQueryResultArticle(
+            id=uuid4(),
+            title=replace_text,
+            input_message_content=InputTextMessageContent(replace_text)))
+    except ValueError:
+        pass
 
     update.inline_query.answer(results)
 
